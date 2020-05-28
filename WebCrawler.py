@@ -42,20 +42,19 @@ for line in tag1.findAll('td', class_ = 'result_text'):
 usernext = input('Select one of the movie/series from the given list : ')
 j = 1
 for line in tag1.findAll('td', class_ = 'result_text'):
-    for letter in line.find('a'):
+    for letter in line.find_all('a'):
         if int(usernext) == j :
-            print(letter)
-            # nurl = letter.href.string
+            nurl = 'https://www.imdb.com' + letter.get('href')
         j += 1
         # print(line.find_all(re.compile(".*\((.+)\).*")))
 
-# print('\n this is nurl', nurl, '\n')
-#
-# html = urllib.request.urlopen(nurl, context=ctx).read()
-# soup = BeautifulSoup(html, 'html.parser')
-# print('The reviews for selected item are : ')
-# tags = soup.find('div', class_ = 'title_bar_wrapper')
-# for tag in tags:
-#     for ta in tag.findAll('div', class_ = 'ratingValue'):
-#         for t in ta.find('strong'):
-#             print(tag.title.string)
+print('\nChecking...\n')
+
+html = urllib.request.urlopen(nurl, context=ctx).read()
+soup = BeautifulSoup(html, 'html.parser')
+
+# Retriving reviews from IMDb
+print('The reviews for selected item are : ')
+tags = soup.find('div', class_ = 'title_bar_wrapper')
+for tag in tags.find('div', class_ = 'ratingValue').find('strong'):
+    print('Rating : ', tag.get_text())
